@@ -1,13 +1,13 @@
 # TC001 Plus Dual Camera Interface
 
-**Unofficial Linux implementation for TOPDON TC001 Plus thermal camera systems**
+**Unofficial Linux implementation for TOPDON TC001 Plus thermal camera systems using Python**
 
 ## Overview
 
 This is the **first and only public library** for accessing TOPDON TC001 Plus dual camera systems on Linux. The manufacturer does not provide Linux support, drivers, or Python libraries.
 
 **What this project provides:**
-- **Unofficial Python implementation** for TC001 Plus dual camera access
+- **Unofficial Python implementation** for TC001 Plus dual camera access (tested on Python 3.8)
 - **Ubuntu 20+ compatibility** with full dual camera support
 - **Simultaneous thermal + RGB streaming** at 25fps
 - **Temperature-calibrated data** for object detection and thermal analysis
