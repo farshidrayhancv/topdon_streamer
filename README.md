@@ -1,6 +1,31 @@
 # TC001 Plus Dual Camera Interface
 
-A UNOFICCIAL Linux solution for simultaneous thermal and RGB camera access from TC001 Plus thermal camera systems at 25hz.
+**Unofficial Linux implementation for TOPDON TC001 Plus thermal camera systems**
+
+## Overview
+
+This is the **first and only public library** for accessing TOPDON TC001 Plus dual camera systems on Linux. The manufacturer does not provide Linux support, drivers, or Python libraries.
+
+**What this project provides:**
+- **Unofficial Python implementation** for TC001 Plus dual camera access
+- **Ubuntu 20+ compatibility** with full dual camera support
+- **Simultaneous thermal + RGB streaming** at 25fps
+- **Temperature-calibrated data** for object detection and thermal analysis
+- **Open source solution** 
+
+**Manufacturer Support Status:**
+- ❌ No official Linux drivers
+- ❌ No Python SDK  
+- ❌ No Ubuntu support
+- ❌ Windows-only software package
+
+A Linux solution for simultaneous thermal and RGB camera access from TC001 Plus thermal camera systems.
+
+## Example Output
+
+![TC001 Plus Dual Camera Interface](example.png)
+
+*Three-window interface showing: Colorized thermal camera (left), Raw thermal data for object detection (center), and RGB camera feed (right)*
 
 ## The Problem
 
