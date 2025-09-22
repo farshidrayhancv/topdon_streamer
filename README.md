@@ -22,6 +22,89 @@ This kernel parameter tells the Linux UVC driver to handle multiple camera strea
 - **Threading**: Separate capture threads for each camera to maintain 25fps performance
 - **Multiple Display Windows**: Three separate OpenCV windows for different use cases
 
+## Architecture Overview
+
+```mermaid
+graph TD
+    subgraph "Hardware Layer"
+        TC001[TC001 Plus Camera]
+        USB[USB Controller]
+        THERMAL[Thermal Sensor /dev/video6]
+        RGB[RGB Camera /dev/video4]
+        
+        TC001 --> USB
+        USB --> THERMAL
+        USB --> RGB
+    end
+    
+    subgraph "Operating Systems Comparison"
+        WINDOWS[Windows: Works ✅]
+        ANDROID[Android: Works ✅] 
+        LINUX_ORIG[Linux Original: FAILS ❌]
+        
+        WINDOWS --> WIN_DRIVER[Windows USB Driver<br/>Handles Multiple Streams]
+        ANDROID --> AND_DRIVER[Android USB Driver<br/>Smart Bandwidth Allocation]
+        LINUX_ORIG --> UVC_ORIG[Linux UVC Driver<br/>Single Stream Limitation]
+    end
+    
+    subgraph "Linux Problem Analysis"
+        UVC_ORIG --> VIDIOC[VIDIOC_STREAMON ioctl]
+        VIDIOC --> ERROR[❌ No space left on device<br/>ENOSPC/-28 Error]
+        ERROR --> WHY[USB Bandwidth Conflict<br/>Driver Architecture Limitation]
+    end
+    
+    subgraph "Our Solution"
+        KERNEL_FIX[🔧 Kernel Module Fix<br/>sudo modprobe uvcvideo quirks=0x80]
+        FFMPEG[FFmpeg Subprocess Approach]
+        THREADING[Multi-Threading Architecture]
+        
+        KERNEL_FIX --> UVC_FIXED[Linux UVC Driver<br/>With Quirks Parameter]
+        UVC_FIXED --> FFMPEG
+        FFMPEG --> THREADING
+    end
+    
+    subgraph "Implementation Architecture"
+        FFMPEG --> THERMAL_PROC[Thermal FFmpeg Process<br/>256x384 YUYV 25fps]
+        FFMPEG --> RGB_PROC[RGB FFmpeg Process<br/>640x480 MJPEG 25fps]
+        
+        THERMAL_PROC --> THERMAL_THREAD[Thermal Capture Thread]
+        RGB_PROC --> RGB_THREAD[RGB Capture Thread]
+        
+        THERMAL_THREAD --> THERMAL_DATA[Raw Thermal Data<br/>Temperature Calculation]
+        RGB_THREAD --> RGB_DATA[RGB Frame Data<br/>Color Conversion]
+        
+        THERMAL_DATA --> DISPLAY_THERMAL[Colorized Thermal Display]
+        THERMAL_DATA --> DISPLAY_RAW[Raw Temperature Data]
+        RGB_DATA --> DISPLAY_RGB[RGB Camera Display]
+    end
+    
+    subgraph "Data Flow"
+        DISPLAY_THERMAL --> OPENCV1[OpenCV Window 1<br/>TC001 Thermal Camera]
+        DISPLAY_RAW --> OPENCV2[OpenCV Window 2<br/>TC001 Raw Thermal Data]
+        DISPLAY_RGB --> OPENCV3[OpenCV Window 3<br/>TC001 RGB Camera]
+        
+        OPENCV1 --> OUTPUT[Three Synchronized Windows<br/>25fps Each Camera]
+        OPENCV2 --> OUTPUT
+        OPENCV3 --> OUTPUT
+    end
+    
+    subgraph "Key Technical Breakthrough"
+        BREAKTHROUGH[🎯 Key Insight:<br/>quirks=0x80 Parameter<br/>Changes UVC Driver Behavior]
+        BREAKTHROUGH --> RESULT[✅ Both Cameras Simultaneous<br/>✅ 25fps Performance<br/>✅ Full Resolution<br/>✅ Temperature Data]
+    end
+    
+    %% Styling
+    classDef problemNode fill:#ffcccc,stroke:#ff6666,stroke-width:2px
+    classDef solutionNode fill:#ccffcc,stroke:#66cc66,stroke-width:2px  
+    classDef processNode fill:#cceeff,stroke:#6699ff,stroke-width:2px
+    classDef successNode fill:#ccffaa,stroke:#66aa66,stroke-width:3px
+    
+    class ERROR,WHY,LINUX_ORIG,UVC_ORIG problemNode
+    class KERNEL_FIX,UVC_FIXED,FFMPEG,THREADING solutionNode
+    class THERMAL_PROC,RGB_PROC,THERMAL_THREAD,RGB_THREAD processNode
+    class OUTPUT,RESULT,BREAKTHROUGH successNode
+```
+
 ## Hardware Requirements
 
 - TC001 Plus thermal camera system with dual cameras:
