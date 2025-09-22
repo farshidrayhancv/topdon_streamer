@@ -366,6 +366,5 @@ v4l2-ctl -d /dev/video6 --list-formats-ext
 - **Hardware compatibility**: Wiki documentation
 - **RGB feed fixes**: Special bounty consideration
 
-**Repository:** `https://github.com/yourusername/tc001-dual-camera`
 
 Every contribution helps make this solution work better across different hardware configurations!
