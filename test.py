@@ -333,7 +333,13 @@ exec ffmpeg -hide_banner -loglevel error \\
                     debug_print(f"RGB reshape error: {e}", "ERROR")
                     continue
                 
-                frame_bgr = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+                frame_bgr = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR) # Doesnt work
+                
+                # DEBUG: Try different color conversions if skin appears blueish
+                # frame_bgr = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  # Reverse conversion
+                frame_bgr = frame[:,:,[0,1,2]]  # Manual channel swap (RGB->BGR)
+                
+                debug_print(f"RGB color format: {frame.shape}, min: {frame.min()}, max: {frame.max()}")
                 
                 height, width = frame_bgr.shape[:2]
                 split_point = width // 2 + 16
