@@ -337,7 +337,7 @@ exec ffmpeg -hide_banner -loglevel error \\
                 
                 # DEBUG: Try different color conversions if skin appears blueish
                 # frame_bgr = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)  # Reverse conversion
-                frame_bgr = frame[:,:,[0,1,2]]  # Manual channel swap (RGB->BGR)
+                frame_bgr = frame[:,:,[1,0,2]]  # Manual channel swap (RGB->BGR)
                 
                 debug_print(f"RGB color format: {frame.shape}, min: {frame.min()}, max: {frame.max()}")
                 
