@@ -1,6 +1,6 @@
 # TC001 Plus Dual Camera Interface
 
-A Linux solution for simultaneous thermal and RGB camera access from TC001 Plus thermal camera systems.
+A UNOFICCIAL Linux solution for simultaneous thermal and RGB camera access from TC001 Plus thermal camera systems at 25hz.
 
 ## The Problem
 
